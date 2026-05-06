@@ -133,7 +133,7 @@ Open the local URL Wrangler prints.
 Create a new repository for this folder, for example:
 
 ```text
-dc256-victim-game
+dc256-evilginx-game
 ```
 
 Push this app as the repo root.
@@ -144,7 +144,7 @@ From the repo directory:
 
 ```bash
 npx wrangler login
-npx wrangler d1 create dc256-victim-game
+npx wrangler d1 create dc256-evilginx-game
 ```
 
 Cloudflare prints a `database_id`. Put that value into `wrangler.toml`:
@@ -152,7 +152,7 @@ Cloudflare prints a `database_id`. Put that value into `wrangler.toml`:
 ```toml
 [[d1_databases]]
 binding = "GAME_DB"
-database_name = "dc256-victim-game"
+database_name = "dc256-evilginx-game"
 database_id = "the-id-cloudflare-printed"
 ```
 
@@ -165,7 +165,7 @@ npm run db:init:remote
 If you already created the database from an earlier version of this app, add the service column:
 
 ```bash
-npx wrangler d1 execute dc256-victim-game --remote --file=./migrations/002_add_service_id.sql
+npx wrangler d1 execute dc256-evilginx-game --remote --file=./migrations/002_add_service_id.sql
 ```
 
 ### 3. Create The Cloudflare Pages Project
@@ -205,7 +205,7 @@ In the Pages project:
 GAME_DB
 ```
 
-5. Select the `dc256-victim-game` database.
+5. Select the `dc256-evilginx-game` database.
 
 ### 5. Add Environment Variables
 
@@ -252,14 +252,6 @@ phishlets/dc256_devicevault.yaml
 phishlets/dc256_cloudconsole.yaml
 ```
 
-Those files use this placeholder upstream:
-
-```text
-dc256-victim-game.pages.dev
-```
-
-Replace that hostname in every `dc256_*.yaml` phishlet with your actual Cloudflare Pages hostname after deployment.
-
 The target login endpoint is:
 
 ```text
@@ -284,7 +276,7 @@ Your lab capture configuration should look for the synthetic username/email fiel
 Recommended hostnames:
 
 ```text
-dc256-victim-game.pages.dev   -> Cloudflare Pages victim game
+dc256-evilginx-game.pages.dev   -> Cloudflare Pages victim game
 *-login.dc256.lab             -> Evilginx lure/proxy hostnames
 ```
 
@@ -305,7 +297,7 @@ https://payroll-login.dc256.lab/api/login
 The proxied request should reach:
 
 ```text
-https://dc256-victim-game.pages.dev/api/login
+https://dc256-evilginx-game.pages.dev/api/login
 ```
 
 ## Hosts File Entries
@@ -338,13 +330,13 @@ Each participant browser must also trust the Evilginx developer-mode lab CA, or 
 To clear the remote game state:
 
 ```bash
-npx wrangler d1 execute dc256-victim-game --remote --command "DELETE FROM used_lures; DELETE FROM solved_flags; DELETE FROM game_events;"
+npx wrangler d1 execute dc256-evilginx-game --remote --command "DELETE FROM used_lures; DELETE FROM solved_flags; DELETE FROM game_events;"
 ```
 
 To clear only local state:
 
 ```bash
-npx wrangler d1 execute dc256-victim-game --local --command "DELETE FROM used_lures; DELETE FROM solved_flags; DELETE FROM game_events;"
+npx wrangler d1 execute dc256-evilginx-game --local --command "DELETE FROM used_lures; DELETE FROM solved_flags; DELETE FROM game_events;"
 ```
 
 ## Operational Checklist
@@ -353,7 +345,6 @@ Before the workshop:
 
 - Set `GAME_SECRET`.
 - Set `ALLOWED_LURE_HOSTS`.
-- Replace `dc256-victim-game.pages.dev` in the phishlet templates with your deployed Pages hostname.
 - Add the `dc256.lab` hosts entries on participant machines.
 - Trust the Evilginx developer-mode lab CA on participant machines.
 - Initialize D1 with `schema.sql`.
