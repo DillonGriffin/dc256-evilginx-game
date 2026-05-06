@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DC256 Mail Console</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <strong>Mail Console</strong>
+      <span>Send one-time training messages</span>
+    </div>
+    <nav class="nav">
+      <a href="/">Game</a>
+      <a href="/osint.html">OSINT</a>
+      <a href="/mail.html">Mail</a>
+      <a href="/login.html">Login</a>
+      <a href="/submit.html">Submit Flag</a>
+    </nav>
+  </header>
+
+  <main class="two-col">
+    <section class="panel pad">
+      <h1>Send a training email.</h1>
+      <p class="muted">Choose a fake employee, paste a fresh dc256.lab lure link that matches their OSINT profile, and create a one-time delivery.</p>
+      <form id="mailForm">
+        <label>Team name
+          <input id="participant" autocomplete="off">
+        </label>
+        <label>Recipient
+          <select id="accountId" required></select>
+        </label>
+        <div id="profile" class="result">Select a recipient to see likely services.</div>
+        <label>Lure link
+          <input id="lureUrl" type="url" placeholder="https://payroll-login.dc256.lab/..." required>
+        </label>
+        <label>Email body
+          <textarea id="body">Please review the attached secure message before the end of the exercise window.</textarea>
+        </label>
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+
+    <aside class="panel pad">
+      <h2>Delivery Status</h2>
+      <div id="result" class="result">Waiting for a message.</div>
+      <div id="victimAction" style="margin-top: 14px;"></div>
+      <div class="log" style="margin-top: 18px;">
+        <div>Every lure URL can be used once.</div>
+        <div>The lure service must match the recipient's OSINT profile.</div>
+        <div>Replay, recipient mismatch, and wrong-service events are rejected.</div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="/assets/app.js"></script>
+  <script>
+    const participant = DC256.$("#participant");
+    participant.value = DC256.participantName();
+    participant.addEventListener("change", () => DC256.setParticipant(participant.value));
+
+    let accounts = [];
+    let services = [];
+    const accountSelect = DC256.$("#accountId");
+    const profile = DC256.$("#profile");
+
+    function renderProfile() {
+      const account = accounts.find((item) => item.id === accountSelect.value);
+      if (!account) return;
+      const serviceLines = account.likelyServices.map((serviceId) => {
+        const service = services.find((item) => item.id === serviceId);
+        return service ? `- ${service.name}: https://${service.hostname}/...` : `- ${serviceId}`;
+      }).join("\n");
+      profile.textContent = `${account.name}\n${account.title}, ${account.department}\n\nLikely services:\n${serviceLines}`;
+    }
+
+    Promise.all([DC256.loadAccounts(accountSelect), DC256.loadServices()]).then(([loadedAccounts, loadedServices]) => {
+      accounts = loadedAccounts;
+      services = loadedServices.services;
+      renderProfile();
+    });
+    accountSelect.addEventListener("change", renderProfile);
+
+    DC256.$("#mailForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const result = DC256.$("#result");
+      const action = DC256.$("#victimAction");
+      action.innerHTML = "";
+      try {
+        const data = await DC256.api("/api/send", {
+          method: "POST",
+          body: JSON.stringify({
+            participant: DC256.setParticipant(participant.value),
+            accountId: DC256.$("#accountId").value,
+            lureUrl: DC256.$("#lureUrl").value,
+            body: DC256.$("#body").value
+          })
+        });
+        DC256.showResult(result, `${data.delivery.status.toUpperCase()}\n${data.delivery.note}\nRecipient: ${data.delivery.account}\nService: ${data.delivery.service}\nCredential preview: ${data.preview.username} / ${data.preview.passwordHint}`, true);
+        action.innerHTML = `<a class="button" href="${data.victimUrl}" target="_blank" rel="noopener">Open Simulated Victim</a>`;
+      } catch (error) {
+        DC256.showResult(result, error.message, false);
+      }
+    });
+  </script>
+</body>
+</html>

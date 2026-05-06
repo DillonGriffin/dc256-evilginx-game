@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DC256 Breach Map</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <strong>DC256 Breach Map</strong>
+      <span>Shared workshop game board</span>
+    </div>
+    <nav class="nav">
+      <a href="/">Game</a>
+      <a href="/osint.html">OSINT</a>
+      <a href="/mail.html">Mail</a>
+      <a href="/login.html">Login</a>
+      <a href="/submit.html">Submit Flag</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div>
+        <h1>Complete the incident report.</h1>
+        <p class="muted">Each solved fake account unlocks one node. Department keys are earned when enough nodes in that department are complete. Six keys unlock the final report flag.</p>
+      </div>
+      <div class="panel pad">
+        <label>Team name
+          <input id="participant" autocomplete="off">
+        </label>
+        <p class="muted">Stored in this browser and sent with game events.</p>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel stat"><span class="muted">Nodes</span><strong id="solvedCount">0/150</strong></div>
+      <div class="panel stat"><span class="muted">Points</span><strong id="totalPoints">0</strong></div>
+      <div class="panel stat"><span class="muted">Department Keys</span><strong id="keysEarned">0/6</strong></div>
+      <div class="panel stat"><span class="muted">Final Flag</span><strong id="finalStatus">Locked</strong></div>
+    </section>
+
+    <section class="panel pad" style="margin-top: 20px;">
+      <h2>Network Nodes</h2>
+      <p class="muted">Unlocked nodes turn green as teams submit valid flags.</p>
+      <div id="breachMap" class="map"></div>
+    </section>
+
+    <section style="margin-top: 20px;">
+      <h2>Department Progress</h2>
+      <div id="departmentProgress" class="dept-grid"></div>
+    </section>
+  </main>
+
+  <script src="/assets/app.js"></script>
+  <script>
+    const input = DC256.$("#participant");
+    input.value = DC256.participantName();
+    input.addEventListener("change", () => DC256.setParticipant(input.value));
+    async function refresh() {
+      DC256.renderState(await DC256.loadState());
+    }
+    refresh();
+    setInterval(refresh, 10000);
+  </script>
+</body>
+</html>

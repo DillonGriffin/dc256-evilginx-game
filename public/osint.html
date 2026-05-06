@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DC256 OSINT Desk</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <strong>OSINT Desk</strong>
+      <span>Pick the service before sending the lure</span>
+    </div>
+    <nav class="nav">
+      <a href="/">Game</a>
+      <a href="/osint.html">OSINT</a>
+      <a href="/mail.html">Mail</a>
+      <a href="/login.html">Login</a>
+      <a href="/submit.html">Submit Flag</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div>
+        <h1>Find the right pretext.</h1>
+        <p class="muted">Each fake employee has services they are likely to use. A lure for the wrong service is ignored and rejected by the game.</p>
+      </div>
+      <div class="panel pad">
+        <label>Filter employees
+          <input id="filter" placeholder="finance, git, help desk, name...">
+        </label>
+      </div>
+    </section>
+
+    <section class="panel pad">
+      <h2>dc256.lab Service Hosts</h2>
+      <div id="serviceList" class="dept-grid"></div>
+    </section>
+
+    <section style="margin-top: 20px;">
+      <h2>Employee Signals</h2>
+      <div id="accountList" class="dept-grid"></div>
+    </section>
+  </main>
+
+  <script src="/assets/app.js"></script>
+  <script>
+    let accounts = [];
+    let services = [];
+
+    function serviceById(id) {
+      return services.find((service) => service.id === id);
+    }
+
+    function renderServices() {
+      DC256.$("#serviceList").innerHTML = services.map((service) => `
+        <div class="panel dept">
+          <h3>${service.name}</h3>
+          <p class="muted">${service.clue}</p>
+          <p><span class="pill">${service.hostname}</span></p>
+        </div>
+      `).join("");
+    }
+
+    function renderAccounts() {
+      const needle = DC256.$("#filter").value.trim().toLowerCase();
+      const filtered = accounts.filter((account) => {
+        const serviceText = account.likelyServices.map((id) => serviceById(id)?.name || id).join(" ");
+        return `${account.email} ${account.name} ${account.department} ${account.title} ${serviceText}`.toLowerCase().includes(needle);
+      });
+      DC256.$("#accountList").innerHTML = filtered.map((account) => {
+        const serviceLines = account.likelyServices.map((id) => {
+          const service = serviceById(id);
+          return service ? `<li>${service.name} <span class="pill">${service.hostname}</span></li>` : `<li>${id}</li>`;
+        }).join("");
+        const osint = account.osint.map((item) => `<p>${item}</p>`).join("");
+        return `<article class="panel pad">
+          <h3>${account.name}</h3>
+          <p class="muted">${account.email}<br>${account.title}, ${account.department}<br>Tier ${account.tier}, ${account.points} points</p>
+          ${osint}
+          <strong>Likely services</strong>
+          <ul>${serviceLines}</ul>
+        </article>`;
+      }).join("");
+    }
+
+    Promise.all([DC256.loadAccounts(), DC256.loadServices()]).then(([accountData, serviceData]) => {
+      accounts = accountData;
+      services = serviceData.services;
+      renderServices();
+      renderAccounts();
+    });
+
+    DC256.$("#filter").addEventListener("input", renderAccounts);
+  </script>
+</body>
+</html>
