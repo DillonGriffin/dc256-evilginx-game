@@ -4,5 +4,5 @@ pages_build_output_dir = "./public"
 
 [[d1_databases]]
 binding = "GAME_DB"
-database_name = "dc256-victim-game"
+database_name = "dc256-evilginx-game"
 database_id = "b6c8f366-caa7-4b23-96f5-ad3a4b85c123"
