@@ -1,0 +1,14 @@
+{
+  "name": "dc256-victim-game",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Synthetic victim portal and Breach Map game for a closed security workshop.",
+  "scripts": {
+    "dev": "wrangler pages dev public",
+    "db:init": "wrangler d1 execute dc256-victim-game --local --file=./schema.sql",
+    "db:init:remote": "wrangler d1 execute dc256-victim-game --remote --file=./schema.sql"
+  },
+  "devDependencies": {
+    "wrangler": "^4.34.0"
+  }
+}
