@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scoreboard</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <strong>Scoreboard</strong>
+      <span>Shared incident standings</span>
+    </div>
+    <nav class="nav">
+      <a href="/">Game</a>
+      <a href="/scoreboard.html">Scoreboard</a>
+      <a href="/osint.html">OSINT</a>
+      <a href="/mail.html">Mail</a>
+      <a href="/login.html">Login</a>
+      <a href="/submit.html">Submit Flag</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="kicker">TEAM STANDINGS</p>
+        <h1>Track every crew on the board.</h1>
+        <p class="muted">Scores are derived from solved flags in the shared game state. Ties break on total solves, then on earlier completion time.</p>
+      </div>
+      <div class="panel pad">
+        <h2>Live Totals</h2>
+        <div class="grid">
+          <div class="panel stat"><span class="muted">Nodes</span><strong id="solvedCount">0/150</strong></div>
+          <div class="panel stat"><span class="muted">Points</span><strong id="totalPoints">0</strong></div>
+          <div class="panel stat"><span class="muted">Keys</span><strong id="keysEarned">0/6</strong></div>
+          <div class="panel stat"><span class="muted">Final</span><strong id="finalStatus">Locked</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel pad">
+      <h2>Leaderboard</h2>
+      <div id="leaderboard" class="scoreboard"></div>
+    </section>
+  </main>
+
+  <script src="/assets/app.js"></script>
+  <script>
+    async function refresh() {
+      DC256.renderState(await DC256.loadState());
+    }
+    refresh();
+    setInterval(refresh, 10000);
+  </script>
+</body>
+</html>
