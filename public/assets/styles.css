@@ -179,6 +179,10 @@ p {
   gap: 14px;
 }
 
+.board-stack {
+  grid-template-columns: 1fr;
+}
+
 .stat {
   position: relative;
   overflow: hidden;
