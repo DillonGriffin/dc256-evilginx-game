@@ -54,6 +54,54 @@ async function loadState() {
   return api("/api/state");
 }
 
+function shortOwner(value) {
+  if (!value) return "";
+  return value.length > 16 ? `${value.slice(0, 16)}...` : value;
+}
+
+function renderLeaderboard(state) {
+  const board = $("#leaderboard");
+  if (!board) return;
+  if (!state.leaderboard.length) {
+    board.innerHTML = `<div class="board-empty">No flags submitted yet.</div>`;
+    return;
+  }
+  board.innerHTML = state.leaderboard.map((entry, index) => `
+    <div class="score-row">
+      <span class="score-rank">#${index + 1}</span>
+      <span class="score-name">${entry.participant}</span>
+      <span class="score-solves">${entry.solves} nodes</span>
+      <span class="score-points">${entry.points}</span>
+    </div>
+  `).join("");
+}
+
+function renderNetwork(state) {
+  const root = $("#breachMap");
+  if (!root) return;
+  root.innerHTML = state.network.map((department) => `
+    <section class="vlan panel">
+      <header class="vlan-head">
+        <div>
+          <h3>${department.name} VLAN</h3>
+          <p class="muted">${department.nodes.length} hosts</p>
+        </div>
+        <span class="pill">${department.key}</span>
+      </header>
+      <div class="vlan-mesh">
+        ${department.nodes.map((node) => `
+          <article class="host-node${node.solved ? " solved" : ""}">
+            <span class="host-tier">T${node.tier}</span>
+            <strong>${node.label}</strong>
+            <small>${node.points} pts</small>
+            <em>${node.solved ? shortOwner(node.owner) : "unclaimed"}</em>
+          </article>
+        `).join("")}
+      </div>
+    </section>
+  `).join("");
+}
+
 function renderState(state) {
   const solved = $("#solvedCount");
   const points = $("#totalPoints");
@@ -74,20 +122,13 @@ function renderState(state) {
       return `<div class="panel dept">
         <h3>${dept.name} ${dept.keyEarned ? '<span class="pill">key earned</span>' : ""}</h3>
         <p class="muted">${dept.solved} of ${dept.total} nodes unlocked</p>
-        <div class="progress"><span style="width:${pct}%; background:${dept.color}"></span></div>
+        <div class="progress"><span style="width:${pct}%; background:var(--accent)"></span></div>
       </div>`;
     }).join("");
   }
 
-  const map = $("#breachMap");
-  if (map) {
-    const solvedIds = new Set(state.solvedAccounts);
-    map.innerHTML = Array.from({ length: state.totalAccounts }, (_, index) => {
-      const id = `acct-${String(index + 1).padStart(3, "0")}`;
-      const solvedClass = solvedIds.has(id) ? " solved" : "";
-      return `<div class="node${solvedClass}" title="${id}"><span>${id.slice(-3)}</span></div>`;
-    }).join("");
-  }
+  renderLeaderboard(state);
+  renderNetwork(state);
 }
 
 window.DC256 = {
