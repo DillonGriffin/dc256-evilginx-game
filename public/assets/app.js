@@ -76,6 +76,59 @@ function renderLeaderboard(state) {
   `).join("");
 }
 
+function renderCampaign(state) {
+  const root = $("#campaignBoard");
+  if (!root || !state.campaign) return;
+  const totals = state.campaign.totals;
+  const overview = `
+    <div class="campaign-overview">
+      <div class="campaign-metric"><span>Valid Captures</span><strong>${totals.captures}/${totals.captureTarget}</strong></div>
+      <div class="campaign-metric"><span>Departments Covered</span><strong>${totals.departmentsCovered}/${totals.departmentTarget}</strong></div>
+      <div class="campaign-metric"><span>Services Used</span><strong>${totals.servicesUsed}/${totals.serviceTarget}</strong></div>
+      <div class="campaign-metric"><span>VLAN Milestones</span><strong>${totals.vlansAtMilestone}/${totals.vlanTarget}</strong></div>
+      <div class="campaign-metric"><span>Tier 2+ Targets</span><strong>${totals.tier2plus}/${totals.tier2plusTarget}</strong></div>
+      <div class="campaign-metric"><span>Tier 4 Targets</span><strong>${totals.tier4}/${totals.tier4Target}</strong></div>
+    </div>
+  `;
+  const phases = `
+    <div class="campaign-phases">
+      ${state.campaign.phases.map((phase, index) => `
+        <section class="campaign-phase panel${phase.complete ? " phase-complete" : index + 1 === state.campaign.activePhase ? " phase-active" : ""}">
+          <header class="campaign-phase-head">
+            <div>
+              <h3>${phase.label}</h3>
+              <p class="muted">${phase.progressLabel} objectives complete</p>
+            </div>
+            <span class="pill">${phase.complete ? "complete" : index + 1 === state.campaign.activePhase ? "active" : "queued"}</span>
+          </header>
+          <div class="campaign-objectives">
+            ${phase.objectives.map((objective) => `
+              <div class="campaign-objective${objective.complete ? " complete" : ""}">
+                <span class="campaign-check">${objective.complete ? "DONE" : "OPEN"}</span>
+                <div>
+                  <strong>${objective.label}</strong>
+                  <small>${objective.current}/${objective.target}</small>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+        </section>
+      `).join("")}
+    </div>
+  `;
+  const vlanMilestones = `
+    <div class="campaign-vlans">
+      ${state.campaign.departmentMilestones.map((milestone) => `
+        <div class="campaign-vlan${milestone.complete ? " complete" : ""}">
+          <span>${milestone.name}</span>
+          <strong>${milestone.solved}/${milestone.target}</strong>
+        </div>
+      `).join("")}
+    </div>
+  `;
+  root.innerHTML = overview + phases + vlanMilestones;
+}
+
 function renderNetwork(state) {
   const root = $("#breachMap");
   if (!root) return;
@@ -154,6 +207,7 @@ function renderState(state) {
 
   renderLeaderboard(state);
   renderNetwork(state);
+  renderCampaign(state);
 }
 
 window.DC256 = {
