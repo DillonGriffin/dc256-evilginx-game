@@ -214,8 +214,87 @@ p {
   margin-top: 18px;
 }
 
+.core-map {
+  position: relative;
+  overflow: hidden;
+  padding: 18px;
+}
+
+.core-map::before {
+  content: "";
+  position: absolute;
+  inset: 88px 48px auto;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(141, 255, 149, 0.45) 12%, rgba(141, 255, 149, 0.45) 88%, transparent 100%);
+}
+
+.core-rack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.core-switch,
+.core-uplink {
+  position: relative;
+  padding: 18px;
+  border: 1px solid var(--line-2);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(141, 255, 149, 0.08) 0%, rgba(0, 0, 0, 0.12) 100%),
+    #101414;
+}
+
+.core-switch::after,
+.core-uplink::after {
+  content: "";
+  position: absolute;
+  inset: auto 14px 12px 14px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent) 0%, transparent 95%);
+}
+
+.core-label {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.core-switch strong,
+.core-uplink strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 18px;
+}
+
+.core-switch small,
+.core-uplink span {
+  color: var(--muted);
+}
+
+.vlan-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
 .vlan {
+  position: relative;
   padding: 16px;
+}
+
+.vlan-trunk {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  width: 2px;
+  height: 18px;
+  background: linear-gradient(180deg, rgba(141, 255, 149, 0.6) 0%, rgba(141, 255, 149, 0.15) 100%);
+  transform: translateX(-50%);
 }
 
 .vlan-head {
@@ -224,6 +303,26 @@ p {
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 12px;
+}
+
+.vlan-progress-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.vlan-progress-meta strong {
+  color: var(--accent);
+  font-size: 13px;
+}
+
+.vlan-progress {
+  margin-bottom: 14px;
 }
 
 .vlan-mesh {
@@ -564,6 +663,10 @@ ul {
     grid-template-columns: 1fr;
   }
 
+  .vlan-grid {
+    grid-template-columns: 1fr;
+  }
+
   .vlan-mesh {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -587,6 +690,10 @@ ul {
 
   .vlan-mesh {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .core-rack {
+    grid-template-columns: 1fr;
   }
 
   .score-row {
