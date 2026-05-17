@@ -79,27 +79,52 @@ function renderLeaderboard(state) {
 function renderNetwork(state) {
   const root = $("#breachMap");
   if (!root) return;
-  root.innerHTML = state.network.map((department) => `
-    <section class="vlan panel">
-      <header class="vlan-head">
-        <div>
-          <h3>${department.name} VLAN</h3>
-          <p class="muted">${department.nodes.length} hosts</p>
+  const totalSolved = state.network.reduce((sum, vlan) => sum + vlan.solved, 0);
+  const totalHosts = state.network.reduce((sum, vlan) => sum + vlan.total, 0);
+  root.innerHTML = `
+    <section class="core-map panel">
+      <div class="core-rack">
+        <div class="core-switch">
+          <span class="core-label">CORE</span>
+          <strong>dc256-core-switch</strong>
+          <small>${totalSolved}/${totalHosts} hosts recovered</small>
         </div>
-        <span class="pill">${department.key}</span>
-      </header>
-      <div class="vlan-mesh">
-        ${department.nodes.map((node) => `
-          <article class="host-node${node.solved ? " solved" : ""}">
-            <span class="host-tier">T${node.tier}</span>
-            <strong>${node.label}</strong>
-            <small>${node.points} pts</small>
-            <em>${node.solved ? shortOwner(node.owner) : "unclaimed"}</em>
-          </article>
+        <div class="core-uplink">
+          <span>uplink</span>
+          <strong>incident-bus</strong>
+        </div>
+      </div>
+      <div class="vlan-grid">
+        ${state.network.map((department) => `
+          <section class="vlan panel">
+            <div class="vlan-trunk" aria-hidden="true"></div>
+            <header class="vlan-head">
+              <div>
+                <h3>${department.name} VLAN</h3>
+                <p class="muted">${department.solved}/${department.total} hosts recovered</p>
+              </div>
+              <span class="pill">${department.key}</span>
+            </header>
+            <div class="vlan-progress-meta">
+              <span>segment progress</span>
+              <strong>${department.percent}%</strong>
+            </div>
+            <div class="progress vlan-progress"><span style="width:${department.percent}%; background:var(--accent)"></span></div>
+            <div class="vlan-mesh">
+              ${department.nodes.map((node) => `
+                <article class="host-node${node.solved ? " solved" : ""}">
+                  <span class="host-tier">T${node.tier}</span>
+                  <strong>${node.label}</strong>
+                  <small>${node.points} pts</small>
+                  <em>${node.solved ? shortOwner(node.owner) : "unclaimed"}</em>
+                </article>
+              `).join("")}
+            </div>
+          </section>
         `).join("")}
       </div>
     </section>
-  `).join("");
+  `;
 }
 
 function renderState(state) {
