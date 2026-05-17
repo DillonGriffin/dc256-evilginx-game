@@ -40,11 +40,8 @@ export async function getGameState(db, finalFlagValue = null) {
     if (right.solves !== left.solves) return right.solves - left.solves;
     return String(left.lastSolvedAt).localeCompare(String(right.lastSolvedAt));
   });
-  const network = getDepartments().map((department) => ({
-    name: department.name,
-    color: department.color,
-    key: department.key,
-    nodes: accounts
+  const network = getDepartments().map((department) => {
+    const nodes = accounts
       .filter((account) => account.department === department.name)
       .map((account) => {
         const solve = solvedById.get(account.id);
@@ -56,8 +53,18 @@ export async function getGameState(db, finalFlagValue = null) {
           solved: Boolean(solve),
           owner: solve?.participant || null
         };
-      })
-  }));
+      });
+    const solvedCount = nodes.filter((node) => node.solved).length;
+    return {
+      name: department.name,
+      color: department.color,
+      key: department.key,
+      solved: solvedCount,
+      total: nodes.length,
+      percent: Math.round((solvedCount / nodes.length) * 100),
+      nodes
+    };
+  });
 
   return {
     solvedCount: solved.length,
