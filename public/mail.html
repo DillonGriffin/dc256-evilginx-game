@@ -6,11 +6,11 @@
   <title>DC256 Mail Console</title>
   <link rel="stylesheet" href="/assets/styles.css">
 </head>
-<body>
+<body class="mail-page">
   <header class="topbar">
     <div class="brand">
       <strong>Mail Console</strong>
-      <span>Send one-time training messages</span>
+      <span>Compose internal message</span>
     </div>
     <nav class="nav">
       <a href="/">Game</a>
@@ -21,9 +21,19 @@
     </nav>
   </header>
 
-  <main class="two-col">
-    <section class="panel pad">
-      <h1>Send a training email.</h1>
+  <main class="mail-layout">
+    <aside class="mail-sidebar panel pad">
+      <h2>Folders</h2>
+      <div class="mail-folders">
+        <a class="mail-folder active" href="/mail.html">Drafts</a>
+        <a class="mail-folder" href="/osint.html">Directory</a>
+        <a class="mail-folder" href="/">Operations</a>
+      </div>
+      <div class="result" id="profile">Select a recipient to see likely services.</div>
+    </aside>
+
+    <section class="panel pad mail-compose">
+      <h1>New message</h1>
       <p class="muted">Choose a fake employee, paste a fresh dc256.lab lure link that matches their OSINT profile, and create a one-time delivery.</p>
       <form id="mailForm">
         <label>Team name
@@ -32,9 +42,11 @@
         <label>Recipient
           <select id="accountId" required></select>
         </label>
-        <div id="profile" class="result">Select a recipient to see likely services.</div>
         <label>Lure link
           <input id="lureUrl" type="url" placeholder="https://payroll-login.dc256.lab/..." required>
+        </label>
+        <label>Subject
+          <input id="subject" value="Action required before end of shift">
         </label>
         <label>Email body
           <textarea id="body">Please review the attached secure message before the end of the exercise window.</textarea>
@@ -43,7 +55,7 @@
       </form>
     </section>
 
-    <aside class="panel pad">
+    <aside class="panel pad mail-status">
       <h2>Delivery Status</h2>
       <div id="result" class="result">Waiting for a message.</div>
       <div id="victimAction" style="margin-top: 14px;"></div>
