@@ -14,6 +14,7 @@
     </div>
     <nav class="nav">
       <a href="/">Game</a>
+      <a href="/scoreboard.html">Scoreboard</a>
       <a href="/osint.html">OSINT</a>
       <a href="/mail.html">Mail</a>
       <a href="/login.html">Login</a>
@@ -43,18 +44,10 @@
       <div class="panel stat"><span class="muted">Final Report</span><strong id="finalStatus">Locked</strong></div>
     </section>
 
-    <section class="network-layout">
-      <div class="panel pad">
-        <h2>Network Topology</h2>
-        <p class="muted">Hosts are grouped into department VLANs under a shared core switch. Each VLAN shows local recovery progress and claimed hosts glow green with the team tag that submitted the flag.</p>
-        <div id="breachMap" class="network-map"></div>
-      </div>
-
-      <aside class="panel pad">
-        <h2>Leaderboard</h2>
-        <p class="muted">Shared score across all participants.</p>
-        <div id="leaderboard" class="scoreboard"></div>
-      </aside>
+    <section class="panel pad">
+      <h2>Network Topology</h2>
+      <p class="muted">Hosts are grouped into department VLANs under a shared core switch. Each VLAN shows local recovery progress and claimed hosts glow green with the team tag that submitted the flag.</p>
+      <div id="breachMap" class="network-map"></div>
     </section>
 
     <section style="margin-top: 20px;">
