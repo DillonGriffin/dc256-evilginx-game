@@ -214,6 +214,138 @@ p {
   margin-top: 18px;
 }
 
+.campaign-board {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.campaign-overview {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.campaign-metric {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.campaign-metric span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.campaign-metric strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--accent);
+  font-size: 22px;
+}
+
+.campaign-phases {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.campaign-phase {
+  padding: 16px;
+}
+
+.campaign-phase.phase-active {
+  border-color: rgba(141, 255, 149, 0.55);
+  box-shadow: 0 0 0 1px rgba(141, 255, 149, 0.08), 0 0 22px rgba(141, 255, 149, 0.08);
+}
+
+.campaign-phase.phase-complete {
+  border-color: rgba(141, 255, 149, 0.45);
+}
+
+.campaign-phase-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.campaign-objectives {
+  display: grid;
+  gap: 8px;
+}
+
+.campaign-objective {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.campaign-objective.complete {
+  border-color: rgba(141, 255, 149, 0.35);
+}
+
+.campaign-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 26px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: #0d1111;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.campaign-objective strong,
+.campaign-objective small {
+  display: block;
+}
+
+.campaign-objective small {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.campaign-vlans {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.campaign-vlan {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.campaign-vlan.complete {
+  border-color: rgba(141, 255, 149, 0.45);
+}
+
+.campaign-vlan span {
+  color: var(--muted);
+}
+
+.campaign-vlan strong {
+  color: var(--accent);
+}
+
 .core-map {
   position: relative;
   overflow: hidden;
@@ -670,6 +802,12 @@ ul {
     grid-template-columns: 1fr;
   }
 
+  .campaign-overview,
+  .campaign-phases,
+  .campaign-vlans {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .vlan-mesh {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -687,7 +825,10 @@ ul {
 
   .hud,
   .grid,
-  .dept-grid {
+  .dept-grid,
+  .campaign-overview,
+  .campaign-phases,
+  .campaign-vlans {
     grid-template-columns: 1fr;
   }
 
