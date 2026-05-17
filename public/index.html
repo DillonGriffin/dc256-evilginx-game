@@ -10,7 +10,7 @@
   <header class="topbar">
     <div class="brand">
       <strong>DC256 Breach Map</strong>
-      <span>Shared workshop game board</span>
+      <span>Operations console</span>
     </div>
     <nav class="nav">
       <a href="/">Game</a>
@@ -22,34 +22,43 @@
   </header>
 
   <main>
-    <section class="intro">
+    <section class="hero">
       <div>
-        <h1>Complete the incident report.</h1>
-        <p class="muted">Each solved fake account unlocks one node. Department keys are earned when enough nodes in that department are complete. Six keys unlock the final report flag.</p>
+        <p class="kicker">LIVE INCIDENT STATUS</p>
+        <h1>Trace the breach across segmented VLANs.</h1>
+        <p class="muted">Every captured synthetic account lights up a host in the network. Department keys come online when enough internal nodes are reclaimed. Six keys unlock the final report.</p>
       </div>
       <div class="panel pad">
         <label>Team name
           <input id="participant" autocomplete="off">
         </label>
-        <p class="muted">Stored in this browser and sent with game events.</p>
+        <p class="muted">Stored in this browser and stamped on score events.</p>
       </div>
     </section>
 
-    <section class="grid">
-      <div class="panel stat"><span class="muted">Nodes</span><strong id="solvedCount">0/150</strong></div>
-      <div class="panel stat"><span class="muted">Points</span><strong id="totalPoints">0</strong></div>
-      <div class="panel stat"><span class="muted">Department Keys</span><strong id="keysEarned">0/6</strong></div>
-      <div class="panel stat"><span class="muted">Final Flag</span><strong id="finalStatus">Locked</strong></div>
+    <section class="hud">
+      <div class="panel stat"><span class="muted">Nodes Online</span><strong id="solvedCount">0/150</strong></div>
+      <div class="panel stat"><span class="muted">Total Points</span><strong id="totalPoints">0</strong></div>
+      <div class="panel stat"><span class="muted">Keys Recovered</span><strong id="keysEarned">0/6</strong></div>
+      <div class="panel stat"><span class="muted">Final Report</span><strong id="finalStatus">Locked</strong></div>
     </section>
 
-    <section class="panel pad" style="margin-top: 20px;">
-      <h2>Network Nodes</h2>
-      <p class="muted">Unlocked nodes turn green as teams submit valid flags.</p>
-      <div id="breachMap" class="map"></div>
+    <section class="network-layout">
+      <div class="panel pad">
+        <h2>Network Topology</h2>
+        <p class="muted">Hosts are grouped into department VLANs. Claimed accounts glow green with the team tag that submitted the flag.</p>
+        <div id="breachMap" class="network-map"></div>
+      </div>
+
+      <aside class="panel pad">
+        <h2>Leaderboard</h2>
+        <p class="muted">Shared score across all participants.</p>
+        <div id="leaderboard" class="scoreboard"></div>
+      </aside>
     </section>
 
     <section style="margin-top: 20px;">
-      <h2>Department Progress</h2>
+      <h2>Department Keys</h2>
       <div id="departmentProgress" class="dept-grid"></div>
     </section>
   </main>
